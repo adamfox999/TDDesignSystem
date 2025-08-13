@@ -1,7 +1,7 @@
 import { parseMTB } from './lib/mtb';
 import { createSummary, Summary } from './lib/util';
 import { syncColors, getOrCreateCollection } from './lib/webflow-sync';
-import { getWebflow } from './lib/wf';
+import { getWebflow, setPreferredSize } from './lib/wf';
 
 function setEnvNote() {
   const el = document.getElementById('env-note');
@@ -99,6 +99,7 @@ setEnvNote();
 attachFileLoader();
 attachSampleLoader();
 attachActions();
+setPreferredSize();
 
 // Minimal sample MTB-like data for testing
 const sampleMTB = {
