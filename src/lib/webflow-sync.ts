@@ -1,4 +1,5 @@
 import { MODES, ModeSlug, normalizeHex, slugify, Summary, log, warn } from './util';
+import { getWebflow } from './wf';
 
 export type SyncOptions = {
   collectionName: string;
@@ -10,25 +11,26 @@ export type SyncOptions = {
 export type ModeMap = Record<ModeSlug, VariableMode>;
 
 export async function getOrCreateCollection(name: string): Promise<VariableCollection> {
-  if (!window.webflow) throw new Error('Webflow Designer API not available. Open this in Webflow Designer.');
+  const wf = getWebflow();
+  if (!wf) throw new Error('Webflow Designer API not available. Open this in Webflow Designer.');
 
   // 1) Try official byName if available
-  if (window.webflow.getVariableCollectionByName) {
-    const byName = await window.webflow.getVariableCollectionByName(name);
+  if (wf.getVariableCollectionByName) {
+    const byName = await wf.getVariableCollectionByName(name);
     if (byName) return byName;
   }
 
   // 2) Try cached id from previous runs
   const cacheKey = `wf-collection-id:${name}`;
   const cachedId = localStorage.getItem(cacheKey);
-  if (cachedId && window.webflow.getVariableCollectionById) {
-    const byId = await window.webflow.getVariableCollectionById(cachedId);
+  if (cachedId && wf.getVariableCollectionById) {
+    const byId = await wf.getVariableCollectionById(cachedId);
     if (byId) return byId;
   }
 
   // 3) Scan all and compare names when possible
   try {
-    const all = await window.webflow.getAllVariableCollections();
+  const all = await wf.getAllVariableCollections();
     for (const col of all) {
       if (typeof col.getName === 'function') {
         try {
@@ -43,7 +45,7 @@ export async function getOrCreateCollection(name: string): Promise<VariableColle
   } catch {}
 
   // 4) Create
-  const created = await window.webflow.createVariableCollection(name);
+  const created = await wf.createVariableCollection(name);
   try { localStorage.setItem(cacheKey, created.id); } catch {}
   return created;
 }

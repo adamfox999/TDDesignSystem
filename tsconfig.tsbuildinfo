@@ -1,1 +1,1 @@
-{"root":["./src/main.ts","./src/lib/mtb.ts","./src/lib/util.ts","./src/lib/webflow-sync.ts","./src/types/webflow-designer.d.ts"],"version":"5.9.2"}
+{"root":["./src/main.ts","./src/lib/mtb.ts","./src/lib/util.ts","./src/lib/webflow-sync.ts","./src/lib/wf.ts","./src/types/webflow-designer.d.ts"],"version":"5.9.2"}

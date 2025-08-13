@@ -1,11 +1,12 @@
 import { parseMTB } from './lib/mtb';
 import { createSummary, Summary } from './lib/util';
 import { syncColors, getOrCreateCollection } from './lib/webflow-sync';
+import { getWebflow } from './lib/wf';
 
 function setEnvNote() {
   const el = document.getElementById('env-note');
   if (!el) return;
-  if ((window as any).webflow) {
+  if (getWebflow()) {
     el.textContent = 'Designer API connected';
   } else {
     el.textContent = 'Not connected to Webflow Designer — dry-run only';
@@ -68,7 +69,7 @@ async function run(dryRun: boolean) {
     return;
   }
 
-  if (!(window as any).webflow) {
+  if (!getWebflow()) {
     summary.logs.push('Designer API unavailable. Showing dry-run diff only.');
     // Simulate diff by printing names
     const names = new Set<string>();
@@ -79,7 +80,7 @@ async function run(dryRun: boolean) {
   }
 
   try {
-    const collection = await getOrCreateCollection(collectionName);
+  const collection = await getOrCreateCollection(collectionName);
     await syncColors(collection, flattened as any, { collectionName, prefix, dryRun, subset }, summary);
   } catch (e: any) {
     summary.logs.push(`Error: ${e.message ?? String(e)}`);
