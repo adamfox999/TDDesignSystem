@@ -1,0 +1,15 @@
+{
+  "name": "Material Colors → Variables",
+  "description": "Sync Material Theme Builder color tokens to Webflow Variables with modes.",
+  "scopes": ["canReadVariables", "canModifyVariables"],
+  "panels": [
+    {
+      "name": "Material Colors Sync",
+      "icon": "eyedropper",
+      "type": "panel",
+      "source": {
+        "url": "/index.html"
+      }
+    }
+  ]
+}
